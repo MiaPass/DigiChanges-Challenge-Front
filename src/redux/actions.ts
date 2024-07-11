@@ -33,7 +33,7 @@ export function getAllGeneral() {
 
 			console.log(response);
 
-			dispatch({ type: "ALL_INFO", payload: "" });
+			dispatch({ type: "ALL_INFO", payload: response });
 		} catch (err) {
 			console.log(err);
 			alert("Ups! Something went wrong...");
