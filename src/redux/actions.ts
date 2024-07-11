@@ -19,17 +19,19 @@ export function getAllGeneral() {
 				"https://digichanges-challenge-back.onrender.com/api/starships"
 			);
 
-			console.log("films:", films.data);
-			console.log("people:", people.data);
-			console.log("planets:", planets.data);
-			console.log("starships:", starships.data);
+			// console.log("films:", films.data);
+			// console.log("people:", people.data);
+			// console.log("planets:", planets.data);
+			// console.log("starships:", starships.data);
 
-			// let response = [
-			// 	...films.data,
-			// 	...people.data,
-			// 	...planets.data,
-			// 	...starships.data,
-			// ];
+			let response = [
+				...films.data,
+				...people.data,
+				...planets.data,
+				...starships.data,
+			];
+
+			console.log(response);
 
 			dispatch({ type: "ALL_INFO", payload: "" });
 		} catch (err) {

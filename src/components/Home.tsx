@@ -17,6 +17,10 @@ function Home() {
 
 	const categories = useSelector((state: RootState) => state.categories);
 	const allInfo = useSelector((state: RootState) => state.allInfo);
+	const films = useSelector((state: RootState) => state.films);
+	const people = useSelector((state: RootState) => state.people);
+	const planets = useSelector((state: RootState) => state.planets);
+	const starships = useSelector((state: RootState) => state.starships);
 
 	React.useEffect(() => {
 		if (allInfo.length <= 0)
