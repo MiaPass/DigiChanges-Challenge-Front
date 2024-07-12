@@ -1,41 +1,45 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React from "react";
-import Nav from "./NavBar";
+import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { getAllGeneral, getCategories } from "../redux/actions";
-import { RootState, AppDispatch } from "../redux/store";
+import { getAllGeneral } from "../redux/actions";
+import { AppDispatch } from "../redux/store";
+
+import { tabPanelInfo } from "./functions/RenderTabsContent";
+import NavBar from "./NavBar";
+import "../css/nav.css";
 
 function Home() {
+	const dispatch = useDispatch<AppDispatch>();
+	const { categories, allInfo, films, people, planets, starships, page } =
+		useSelector((state: any) => state);
+
+	React.useEffect(() => {
+		if (allInfo.length === 0) dispatch(getAllGeneral(page));
+	}, [dispatch, allInfo.length, page]);
+
 	const [value, setValue] = React.useState<number>(0);
 
 	const handleChangeValue = (e: React.SyntheticEvent, newValue: number) => {
 		e.preventDefault();
 		setValue(newValue);
 	};
-	const dispatch = useDispatch<AppDispatch>();
-
-	const categories = useSelector((state: RootState) => state.categories);
-	const allInfo = useSelector((state: RootState) => state.allInfo);
-	const films = useSelector((state: RootState) => state.films);
-	const people = useSelector((state: RootState) => state.people);
-	const planets = useSelector((state: RootState) => state.planets);
-	const starships = useSelector((state: RootState) => state.starships);
-
-	React.useEffect(() => {
-		if (allInfo.length <= 0)
-			dispatch(getAllGeneral()).then(() => {
-				dispatch(getCategories());
-			});
-	}, [dispatch, allInfo.length]);
 
 	return (
 		<>
-			<Nav
-				categories={categories}
+			<NavBar
 				value={value}
 				handleChangeValue={handleChangeValue}
+				categories={categories}
 			/>
+			{tabPanelInfo(
+				categories,
+				value,
+				allInfo,
+				films,
+				people,
+				planets,
+				starships
+			)}
 		</>
 	);
 }

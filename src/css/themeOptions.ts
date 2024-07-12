@@ -15,8 +15,8 @@ export const themeOptions: ThemeOptions = {
 		},
 	},
 	typography: {
-		fontFamily: "Raleway",
-		fontWeightRegular: 500,
+		fontFamily: "Bahnschrift",
+		fontWeightRegular: 400,
 		fontWeightLight: 300,
 		fontSize: 14,
 		fontWeightBold: 700,

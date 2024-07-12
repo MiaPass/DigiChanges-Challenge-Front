@@ -1,4 +1,4 @@
-import React from "react";
+import { Routes, Route } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
 
@@ -11,9 +11,13 @@ const theme = createTheme(themeOptions);
 function App() {
 	return (
 		<ThemeProvider theme={theme}>
+			{/* <BrowserRouter> */}
 			<CssBaseline />
 			<div className="App">
-				<Home />
+				<Routes>
+					<Route path="/" element={<Home />} />
+					{/* <Route path="/:category/:name" element={<Details />} /> */}
+				</Routes>
 			</div>
 		</ThemeProvider>
 	);

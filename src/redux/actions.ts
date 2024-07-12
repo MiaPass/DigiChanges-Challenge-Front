@@ -1,48 +1,51 @@
-// src/redux/actions.ts
-
 import axios from "axios";
 import { Dispatch } from "redux";
 
-export function getAllGeneral() {
-	return async function (dispatch: Dispatch) {
-		try {
-			const films = await axios.get(
-				"https://digichanges-challenge-back.onrender.com/api/films"
-			);
-			const people = await axios.get(
-				"https://digichanges-challenge-back.onrender.com/api/people"
-			);
-			const planets = await axios.get(
-				"https://digichanges-challenge-back.onrender.com/api/planets"
-			);
-			const starships = await axios.get(
-				"https://digichanges-challenge-back.onrender.com/api/starships"
-			);
+// const url = "https://digichanges-challenge-back-m812.onrender.com";
+let url = "localhost:8080";
 
-			// console.log("films:", films.data);
-			// console.log("people:", people.data);
-			// console.log("planets:", planets.data);
-			// console.log("starships:", starships.data);
-
-			let response = [
-				...films.data,
-				...people.data,
-				...planets.data,
-				...starships.data,
-			];
-
-			console.log(response);
-
-			dispatch({ type: "ALL_INFO", payload: response });
-		} catch (err) {
-			console.log(err);
-			alert("Ups! Something went wrong...");
-		}
-	};
+async function getFilms(page: number) {
+	const films = await axios.get(`${url}/api/films/?page=${page}`);
+	return films.data;
 }
 
-export function getCategories() {
+async function getPeople(page: number) {
+	const people = await axios.get(`${url}/api/people/?page=${page}`);
+	return people.data;
+}
+
+async function getPlanets(page: number) {
+	const planets = await axios.get(`${url}/api/planets/?page=${page}`);
+	return planets.data;
+}
+
+async function getStarships(page: number) {
+	const starships = await axios.get(`${url}/api/starships/?page=${page}`);
+	return starships.data;
+}
+
+export function getAllGeneral(page: number) {
 	return async function (dispatch: Dispatch) {
-		dispatch({ type: "CATEGORIES" });
+		try {
+			let films = await getFilms(page);
+			let people = await getPeople(page);
+			let planets = await getPlanets(page);
+			let starships = await getStarships(page);
+
+			let response = [
+				{ category: `films`, data: [...films] },
+				{ category: `people`, data: [...people] },
+				{ category: `planets`, data: [...planets] },
+				{ category: `starships`, data: [...starships] },
+			];
+
+			dispatch({ type: `ALL_INFO`, payload: response });
+		} catch (err) {
+			console.error(err);
+			dispatch({
+				type: `FETCH_ERROR`,
+				payload: `Ups! Something went wrong...`,
+			});
+		}
 	};
 }

@@ -7,21 +7,8 @@ import {
 import { thunk as ThunkMiddleware, ThunkDispatch } from "redux-thunk";
 import reducer from "./reducer";
 
-export interface RootState {
-	allInfo: any[];
-	categories: string[];
-	films: any[];
-	filteredFilms: any[];
-	people: any[];
-	filteredPeople: any[];
-	planets: any[];
-	filteredPlanets: any[];
-	starships: any[];
-	filteredStarships: any[];
-	page: number;
-}
+import { RootState } from "../types/interfaces/rootState.interface";
 
-// Define AppDispatch
 export type AppDispatch = ThunkDispatch<RootState, unknown, any>;
 
 const composeEnhancers =

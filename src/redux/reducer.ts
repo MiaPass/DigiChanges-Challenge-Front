@@ -1,25 +1,17 @@
-// src/redux/reducer.ts
+import { RootState } from "../types/interfaces/rootState.interface";
 
-import { RootState } from "./store"; // Adjust the import path as needed
+import { Action } from "../types/interfaces/actions.interface";
 
 const initialState: RootState = {
 	allInfo: [],
 	categories: ["all"],
 	films: [],
-	filteredFilms: [],
 	people: [],
-	filteredPeople: [],
 	planets: [],
-	filteredPlanets: [],
 	starships: [],
-	filteredStarships: [],
+	theOne: {},
 	page: 1,
 };
-
-interface Action {
-	type: string;
-	payload?: any;
-}
 
 export default function reducer(
 	state = initialState,
@@ -27,21 +19,39 @@ export default function reducer(
 ): RootState {
 	switch (action.type) {
 		case "ALL_INFO":
-			return {
-				...state,
-				allInfo: action.payload,
+			let result = {
+				info: [],
+				categories: [],
+				films: [],
+				people: [],
+				planets: [],
+				starships: [],
 			};
-		case "CATEGORIES":
-			const newCategories = [...state.categories];
-			for (let info of state.allInfo) {
-				if (!newCategories.includes(info.category)) {
-					newCategories.push(info.category);
+
+			for (let one of action.payload) {
+				if (one.category === "films") {
+					result.films = [...one.data];
+				} else if (one.category === "people") {
+					result.people = [...one.data];
+				} else if (one.category === "planets") {
+					result.planets = [...one.data];
+				} else if (one.category === "starships") {
+					result.starships = [...one.data];
 				}
+				result.categories.push(one.category);
+				result.info = [...one.data];
 			}
+
 			return {
 				...state,
-				categories: newCategories,
+				allInfo: result.info,
+				categories: [...state.categories, ...result.categories],
+				films: result.films,
+				people: result.people,
+				planets: result.planets,
+				starships: result.starships,
 			};
+
 		default:
 			return state;
 	}
