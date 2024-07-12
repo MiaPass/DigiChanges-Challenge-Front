@@ -4,7 +4,7 @@ import { CssBaseline } from "@mui/material";
 
 import Home from "./components/Home";
 import { themeOptions } from "./css/themeOptions";
-import "./App.css";
+import "./css/App.css";
 
 const theme = createTheme(themeOptions);
 
