@@ -1,45 +1,58 @@
-import * as React from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-import { getAllGeneral } from "../redux/actions";
+import { RootState } from "../types/interfaces/reduxItems.interface";
+import { getAllGeneral, updateCategoryPage } from "../redux/actions";
 import { AppDispatch } from "../redux/store";
-
 import { tabPanelInfo } from "./functions/RenderTabsContent";
-import NavBar from "./NavBar";
-import "../css/nav.css";
+import PaginationCustom from "./Pagination";
+import "../css/home.css";
 
-function Home() {
+function Home({ categories, value }) {
 	const dispatch = useDispatch<AppDispatch>();
-	const { categories, allInfo, films, people, planets, starships, page } =
-		useSelector((state: any) => state);
+	const state = useSelector((state: RootState) => state);
+	const currentCategory = categories[value];
 
 	React.useEffect(() => {
-		if (allInfo.length === 0) dispatch(getAllGeneral(page));
-	}, [dispatch, allInfo.length, page]);
+		dispatch(getAllGeneral(state.page));
+	}, [dispatch, currentCategory, state.page]);
 
-	const [value, setValue] = React.useState<number>(0);
-
-	const handleChangeValue = (e: React.SyntheticEvent, newValue: number) => {
+	const handlePageChange = (e, newPage: number) => {
 		e.preventDefault();
-		setValue(newValue);
+		console.log(newPage);
+		dispatch(updateCategoryPage(pagination[0], newPage));
 	};
+
+	const getPaginationForCategory = () => {
+		if (currentCategory === "all") {
+			return state.allInfo.pagination;
+		} else {
+			return [currentCategory, state[currentCategory].pagination];
+		}
+	};
+
+	const pagination = getPaginationForCategory();
 
 	return (
 		<>
-			<NavBar
-				value={value}
-				handleChangeValue={handleChangeValue}
-				categories={categories}
-			/>
-			{tabPanelInfo(
-				categories,
-				value,
-				allInfo,
-				films,
-				people,
-				planets,
-				starships
-			)}
+			<div className="pagination-container">
+				{pagination && (
+					<PaginationCustom
+						count={pagination[1].totalPages}
+						page={pagination[1].currentPage}
+						onChange={handlePageChange}
+					/>
+				)}
+			</div>
+			{tabPanelInfo(categories, value, state)}
+			<div className="pagination-container">
+				{pagination && (
+					<PaginationCustom
+						count={pagination[1].totalPages}
+						page={pagination[1].currentPage}
+						onChange={handlePageChange}
+					/>
+				)}
+			</div>
 		</>
 	);
 }

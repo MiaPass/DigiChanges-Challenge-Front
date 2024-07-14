@@ -7,7 +7,7 @@ export const themeOptions: ThemeOptions = {
 			main: "#80deea",
 		},
 		secondary: {
-			main: "#fff59d",
+			main: "#9dffad",
 		},
 		background: {
 			default: "#000000",

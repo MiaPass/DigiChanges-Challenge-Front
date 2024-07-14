@@ -1,0 +1,44 @@
+.content-div {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	padding: 0 6%;
+	margin: 0;
+}
+
+.outer-box {
+	width: calc(33.33% - 2rem);
+}
+
+.box-div {
+	width: 100%;
+}
+
+.cards-box {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	gap: 2rem;
+}
+
+.pagination-container {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	margin: 1rem 0;
+}
+
+@media screen and (max-width: 1200px) {
+	.outer-box {
+		width: calc(50% - 2rem);
+	}
+}
+
+@media screen and (max-width: 800px) {
+	.content-div {
+		padding: 0 5%;
+	}
+	.outer-box {
+		width: 90%;
+	}
+}

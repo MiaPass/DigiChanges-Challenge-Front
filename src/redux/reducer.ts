@@ -1,15 +1,31 @@
-import { RootState } from "../types/interfaces/rootState.interface";
+import {
+	RootState,
+	Action,
+	CategoryData,
+	Pagination,
+} from "../types/interfaces/reduxItems.interface";
 
-import { Action } from "../types/interfaces/actions.interface";
+const initialPagination: Pagination = {
+	currentPage: 1,
+	totalPages: 1,
+	totalItems: 0,
+	itemsPerPage: 12,
+};
+
+const initialCategoryData: CategoryData = {
+	items: [],
+	pagination: initialPagination,
+};
 
 const initialState: RootState = {
-	allInfo: [],
-	categories: ["all"],
-	films: [],
-	people: [],
-	planets: [],
-	starships: [],
-	theOne: {},
+	allInfo: initialCategoryData,
+	categories: ["all", "films", "people", "planets", "starships"],
+	filtered: [],
+	films: initialCategoryData,
+	people: initialCategoryData,
+	planets: initialCategoryData,
+	starships: initialCategoryData,
+	theChosenOne: [],
 	page: 1,
 };
 
@@ -19,37 +35,70 @@ export default function reducer(
 ): RootState {
 	switch (action.type) {
 		case "ALL_INFO":
-			let result = {
-				info: [],
-				categories: [],
-				films: [],
-				people: [],
-				planets: [],
-				starships: [],
-			};
+			let allItems: any[] = [];
+			let updatedCategories: { [key: string]: CategoryData } = {};
 
-			for (let one of action.payload) {
-				if (one.category === "films") {
-					result.films = [...one.data];
-				} else if (one.category === "people") {
-					result.people = [...one.data];
-				} else if (one.category === "planets") {
-					result.planets = [...one.data];
-				} else if (one.category === "starships") {
-					result.starships = [...one.data];
-				}
-				result.categories.push(one.category);
-				result.info = [...one.data];
+			for (let item of action.payload) {
+				const [paginationInfo, ...data] = item.data;
+				allItems = [...allItems, ...data];
+				updatedCategories[item.category] = {
+					items: data,
+					pagination: {
+						currentPage: parseInt(paginationInfo.currentPage),
+						totalPages: parseInt(paginationInfo.totalPages),
+						totalItems: parseInt(paginationInfo.totalItems),
+						itemsPerPage: parseInt(paginationInfo.itemsPerPage),
+					},
+				};
 			}
 
 			return {
 				...state,
-				allInfo: result.info,
-				categories: [...state.categories, ...result.categories],
-				films: result.films,
-				people: result.people,
-				planets: result.planets,
-				starships: result.starships,
+				films: updatedCategories.films || state.films,
+				people: updatedCategories.people || state.people,
+				planets: updatedCategories.planets || state.planets,
+				starships: updatedCategories.starships || state.starships,
+			};
+
+		case "GET_BY_FILTER":
+			return {
+				...state,
+				filtered: action.payload,
+			};
+
+		case "RESET_THE_ONE":
+			return {
+				...state,
+				theChosenOne: [],
+			};
+
+		case "RESET_FILTERED":
+			return {
+				...state,
+				filtered: [],
+			};
+
+		case "GET_ONE":
+			return {
+				...state,
+				theChosenOne: action.payload,
+			};
+
+		case "SET_PAGE":
+			return {
+				...state,
+				page: action.payload,
+			};
+
+		case "UPDATE_CATEGORY_PAGE":
+			let { categoryName, newData, newPagination } = action.payload;
+
+			return {
+				...state,
+				[categoryName]: {
+					items: newData,
+					pagination: newPagination,
+				},
 			};
 
 		default:

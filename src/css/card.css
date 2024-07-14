@@ -1,0 +1,17 @@
+.card {
+	display: flex;
+	justify-content: center;
+	width: 100% !important;
+	height: 9rem;
+	margin: 1rem 0;
+	flex-grow: 0;
+	flex-shrink: 0;
+	align-items: center;
+	transition: transform 0.3s ease-in-out;
+}
+
+.card.details-content {
+	height: fit-content;
+	width: 40% !important;
+	margin: auto;
+}

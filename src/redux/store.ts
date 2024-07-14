@@ -7,7 +7,7 @@ import {
 import { thunk as ThunkMiddleware, ThunkDispatch } from "redux-thunk";
 import reducer from "./reducer";
 
-import { RootState } from "../types/interfaces/rootState.interface";
+import { RootState } from "../types/interfaces/reduxItems.interface";
 
 export type AppDispatch = ThunkDispatch<RootState, unknown, any>;
 
